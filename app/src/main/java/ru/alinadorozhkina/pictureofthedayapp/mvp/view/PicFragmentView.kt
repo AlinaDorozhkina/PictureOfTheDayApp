@@ -6,6 +6,7 @@ import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface PicFragmentView: MvpView {
-    fun setData()
-    fun loadPicture()
+    fun setData(data: String)
+    fun loadPicture(url: String)
+    fun error(message: String)
 }

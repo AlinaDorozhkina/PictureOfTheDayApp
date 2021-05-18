@@ -1,4 +1,4 @@
-package ru.alinadorozhkina.pictureofthedayapp.model.navigation
+package ru.alinadorozhkina.pictureofthedayapp.mvp.model.navigation
 
 import com.github.terrakok.cicerone.Screen
 
