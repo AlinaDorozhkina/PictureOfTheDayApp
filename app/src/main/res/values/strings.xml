@@ -6,4 +6,7 @@
     <string name="favourites">избранное</string>
     <string name="settings">настройки</string>
     <string name="search">поиск</string>
+    <string name="search_hint">Поиск</string>
+    <string name="search_wiki">поиск в Википедии</string>
+    <string name="wiki_helper_text">Введите слово</string>
 </resources>
