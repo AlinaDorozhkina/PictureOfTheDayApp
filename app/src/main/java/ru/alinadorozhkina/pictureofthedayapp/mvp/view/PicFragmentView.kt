@@ -9,4 +9,6 @@ interface PicFragmentView: MvpView {
     fun setData(data: String)
     fun loadPicture(url: String)
     fun error(message: String)
+    fun setTitle(title: String)
+    fun setDescription(desc: String)
 }

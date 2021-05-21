@@ -1,10 +1,13 @@
 package ru.alinadorozhkina.pictureofthedayapp.mvp.ui.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import android.widget.Toast
-import coil.api.load
-import com.google.android.material.snackbar.Snackbar
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.alinadorozhkina.pictureofthedayapp.R
@@ -16,6 +19,9 @@ import ru.alinadorozhkina.pictureofthedayapp.mvp.view.PicFragmentView
 class PicFragment : MvpAppCompatFragment(), PicFragmentView {
 
     private var ui: FragmentPicBinding? = null
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+    lateinit var bottomSheetTitle: TextView
+    lateinit var bottomSheetDescription: TextView
 
     private val presenter by moxyPresenter {
         PicFragmentPresenter().apply {
@@ -33,7 +39,7 @@ class PicFragment : MvpAppCompatFragment(), PicFragmentView {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.bottom_navigation_menu, menu)
+        inflater.inflate(R.menu.bottom_app_bar_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -41,8 +47,22 @@ class PicFragment : MvpAppCompatFragment(), PicFragmentView {
             R.id.favourite-> presenter.favouritesClicked()
             R.id.settings -> presenter.settingsClicked()
             R.id.search -> presenter.seaarchClicked()
+            android.R.id.home -> presenter.homeClicked()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        ui?.inputLayout?.setEndIconOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("https://en.wikipedia.org/wiki/${ui?.inputEditText?.text.toString()}")
+            })
+        }
+        setBottomSheetBehavior(view.findViewById(R.id.bottom_sheet_container))
+        bottomSheetTitle = view.findViewById(R.id.bottom_sheet_description_header)
+        bottomSheetDescription = view.findViewById(R.id.bottom_sheet_description)
+
     }
 
 
@@ -56,11 +76,25 @@ class PicFragment : MvpAppCompatFragment(), PicFragmentView {
     }
 
     override fun loadPicture(url: String) {
-        ui?.imageView?.let { presenter.loader.load(url, it) }
+        ui?.imageView?.let {
+            presenter.loader.load(url, it) }
     }
 
     override fun error(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun setTitle(title: String) {
+       bottomSheetTitle.text = title
+    }
+
+    override fun setDescription(desc: String) {
+        bottomSheetDescription.text = desc
+    }
+
+    private fun setBottomSheetBehavior(bottomSheet: ConstraintLayout) {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     companion object {
