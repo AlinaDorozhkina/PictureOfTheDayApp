@@ -14,6 +14,7 @@ import ru.alinadorozhkina.pictureofthedayapp.R
 import ru.alinadorozhkina.pictureofthedayapp.databinding.FragmentPicBinding
 import ru.alinadorozhkina.pictureofthedayapp.mvp.presenter.PicFragmentPresenter
 import ru.alinadorozhkina.pictureofthedayapp.mvp.ui.App
+import ru.alinadorozhkina.pictureofthedayapp.mvp.ui.activities.MainActivity
 import ru.alinadorozhkina.pictureofthedayapp.mvp.view.PicFragmentView
 
 class PicFragment : MvpAppCompatFragment(), PicFragmentView {
@@ -52,6 +53,8 @@ class PicFragment : MvpAppCompatFragment(), PicFragmentView {
         return super.onOptionsItemSelected(item)
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ui?.inputLayout?.setEndIconOnClickListener {
@@ -59,10 +62,13 @@ class PicFragment : MvpAppCompatFragment(), PicFragmentView {
                 data = Uri.parse("https://en.wikipedia.org/wiki/${ui?.inputEditText?.text.toString()}")
             })
         }
+
+        val context = activity as MainActivity
+        context.setSupportActionBar(view.findViewById(R.id.bottomAppBar))
+        setHasOptionsMenu(true)
         setBottomSheetBehavior(view.findViewById(R.id.bottom_sheet_container))
         bottomSheetTitle = view.findViewById(R.id.bottom_sheet_description_header)
         bottomSheetDescription = view.findViewById(R.id.bottom_sheet_description)
-
     }
 
 
